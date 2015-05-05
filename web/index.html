@@ -1,9 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Number Nemesis</title>
-</head>
-<body>
-	<p> test </p>
-</body>
+  <head>
+    <title>Number Nemesis</title>
+    <meta name="viewport" content="width=device-width,
+                                   initial-scale=1.0,
+                                   maximum-scale=1.0,
+                                   user-scalable=no,
+                                   minimal-ui">
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.kik.com/app/3.0.5/app.min.css">
+    <style></style>
+  </head>
+  <body>
+  	<!-- Home Page -->
+  	<div class="app-page" data-page="home">
+  		<div class="app-topbar">
+  			<div class="app-title">Home</div>
+  		</div>
+  		<div class="app-content">
+  			<div class="app-section">
+  				<h1 id="best-number"> </h1>
+  			</div>
+
+  			<div class="app-section">
+  				<input class="app-input" placeholder="Type in a Number from 0 to 99999">
+  				<div class="app-button">Change Reality</div>
+  			</div>
+  		</div>
+	</div>
+
+
+    <!-- JS -->
+    <script type="text/javascript" src="//zeptojs.com/zepto.min.js"></script>
+    <script type="text/javascript" src="//cdn.kik.com/app/3.0.5/app.min.js"></script>
+    <script type="text/javascript" src="./zerver/API.js"></script>
+    <script>
+    	App.controller('home', function (page){
+    		var update = function(){
+    				API.getBest(function (best) {
+    					if (best.number >= 0){
+    						$(page).find('#best-number').text(best.number);
+    					}
+    				});
+    			};
+    		update();
+
+    		$(page)
+    			.find('.app-button')
+    			.on('click', function () {
+    				var value = $(page).find('.app-input').val();
+    				API.postNumber({value: value}, function(){});
+    				update();
+    			});
+
+    		});
+
+    	(function (App) {
+    		App.enableDragTransition();
+    		try {
+    			App.restore();
+    		} catch (err) {
+    			App.load('home');
+    		}
+    	})(App);
+    </script>
+  </body>
 </html>
